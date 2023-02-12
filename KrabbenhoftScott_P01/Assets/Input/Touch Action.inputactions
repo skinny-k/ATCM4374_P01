@@ -1,0 +1,74 @@
+{
+    "name": "Touch Action",
+    "maps": [
+        {
+            "name": "Touch Action Map",
+            "id": "ef8fcdd9-24f0-4b92-8c09-265584d7fc83",
+            "actions": [
+                {
+                    "name": "Touch Position",
+                    "type": "Value",
+                    "id": "85154047-971f-4644-9a25-817e00561c6a",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Touch Press",
+                    "type": "Button",
+                    "id": "90bee842-e8b9-4025-8a47-753c0d79920c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Touch Press Long",
+                    "type": "Button",
+                    "id": "a9307f2b-8fd4-4b80-b0c6-c23bf0729c51",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "fbe43579-1631-4c93-9cc0-854650e4453d",
+                    "path": "<Touchscreen>/primaryTouch/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Touch Position",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d0654fcf-007e-4f82-a998-168cec403820",
+                    "path": "<Touchscreen>/Press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Touch Press",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1a8f552c-824b-4f26-9bd5-35b486615795",
+                    "path": "<Touchscreen>/Press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Touch Press Long",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
