@@ -1,24 +1,31 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using EnhancedTouch = UnityEngine.InputSystem.EnhancedTouch;
 
 public class TouchManager : MonoBehaviour
 {
-    [SerializeField] private GameObject _player;
+    [SerializeField] GameObject _debugInput;
+    [SerializeField] GameDie _testDie;
     
-    private PlayerInput _playerInput;
+    PlayerInput _playerInput;
 
-    private InputAction _touchLongAction;
-    private InputAction _touchPositionAction;
-    private InputAction _touchPressAction;
+    InputAction _touchLongAction;
+    InputAction _touchPressAction;
+    InputAction _touchPosition;
 
-    private void Awake()
+    public static event Action<Vector2> OnTouchPress;
+    public static event Action<Vector2> OnTouchLongPress;
+    public static event Action<Vector2> OnFingerMove;
+    public static event Action OnFingerUp;
+
+    void Awake()
     {
         _playerInput = GetComponent<PlayerInput>();
 
         _touchLongAction = _playerInput.actions["Touch Press Long"];
-        _touchPositionAction = _playerInput.actions["Touch Position"];
         _touchPressAction = _playerInput.actions["Touch Press"];
+        _touchPosition = _playerInput.actions["Touch Position"];
     }
 
     void OnEnable()
@@ -43,51 +50,52 @@ public class TouchManager : MonoBehaviour
         EnhancedTouch.EnhancedTouchSupport.Disable();
     }
 
-    private void TouchPressed(InputAction.CallbackContext context)
+    void TouchPressed(InputAction.CallbackContext context)
     {
-        Vector3 worldPos = Camera.main.ScreenToWorldPoint(_touchPositionAction.ReadValue<Vector2>());
-        worldPos.z = _player.transform.position.z;
+        Vector2 touchPos = _touchPosition.ReadValue<Vector2>();
+        Vector3 worldPos = Camera.main.ScreenToWorldPoint(touchPos);
+        OnTouchPress?.Invoke(touchPos);
+        // Ray pickup = Camera.main.ScreenPointToRay(touchPos);
 
-        SpriteRenderer sprite = _player.GetComponent<SpriteRenderer>();
-        if (sprite != null)
-        {
-            sprite.color = Color.white;
-        }
-
-        _player.transform.position = worldPos;
+        // UpdateDebug(worldPos, Color.white);
     }
 
-    private void TouchLongPressed(InputAction.CallbackContext context)
+    void TouchLongPressed(InputAction.CallbackContext context)
     {
-        Vector3 worldPos = Camera.main.ScreenToWorldPoint(_touchPositionAction.ReadValue<Vector2>());
-        worldPos.z = _player.transform.position.z;
-
-        SpriteRenderer sprite = _player.GetComponent<SpriteRenderer>();
-        if (sprite != null)
-        {
-            sprite.color = Color.red;
-        }
+        Vector2 touchPos = _touchPosition.ReadValue<Vector2>();
+        Vector3 worldPos = Camera.main.ScreenToWorldPoint(touchPos);
+        OnTouchLongPress?.Invoke(touchPos);
         
-        _player.transform.position = worldPos;
+        // UpdateDebug(worldPos, Color.red);
     }
 
-    private void FingerMove(EnhancedTouch.Finger finger)
+    void FingerMove(EnhancedTouch.Finger finger)
     {
         _touchLongAction.Disable();
             
-        Vector3 worldPos = Camera.main.ScreenToWorldPoint(_touchPositionAction.ReadValue<Vector2>());
-        worldPos.z = _player.transform.position.z;
-
-        SpriteRenderer sprite = _player.GetComponent<SpriteRenderer>();
-        if (sprite != null)
-        {
-            sprite.color = Color.green;
-        }
-        _player.transform.position = worldPos;
+        Vector2 touchPos = _touchPosition.ReadValue<Vector2>();
+        Vector3 worldPos = Camera.main.ScreenToWorldPoint(touchPos);
+        OnFingerMove?.Invoke(touchPos);
+        
+        // UpdateDebug(worldPos, Color.green);
     }
 
-    private void FingerUp(EnhancedTouch.Finger finger)
+    void FingerUp(EnhancedTouch.Finger finger)
     {
         _touchLongAction.Enable();
+
+        OnFingerUp?.Invoke();
+    }
+
+    void UpdateDebug(Vector3 worldPos, Color color)
+    {
+        worldPos.z = _debugInput.transform.position.z;
+
+        SpriteRenderer sprite = _debugInput.GetComponent<SpriteRenderer>();
+        if (sprite != null)
+        {
+            sprite.color = color;
+        }
+        _debugInput.transform.position = worldPos;
     }
 }
