@@ -1,94 +1,61 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using EnhancedTouch = UnityEngine.InputSystem.EnhancedTouch;
+using UnityEngine.InputSystem.EnhancedTouch;
+using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
 public class TouchManager : MonoBehaviour
 {
     [SerializeField] GameObject _debugInput;
-    [SerializeField] GameDie _testDie;
     
-    PlayerInput _playerInput;
-
-    InputAction _touchLongAction;
-    InputAction _touchPressAction;
-    InputAction _touchPosition;
-
-    public static event Action<Vector2> OnTouchPress;
-    public static event Action<Vector2> OnTouchLongPress;
     public static event Action<Vector2> OnFingerMove;
+    public static event Action<Vector2> OnFingerDown;
     public static event Action OnFingerUp;
-
-    void Awake()
-    {
-        _playerInput = GetComponent<PlayerInput>();
-
-        _touchLongAction = _playerInput.actions["Touch Press Long"];
-        _touchPressAction = _playerInput.actions["Touch Press"];
-        _touchPosition = _playerInput.actions["Touch Position"];
-    }
 
     void OnEnable()
     {
-        EnhancedTouch.TouchSimulation.Enable();
-        EnhancedTouch.EnhancedTouchSupport.Enable();
+        TouchSimulation.Enable();
+        EnhancedTouchSupport.Enable();
         
-        _touchPressAction.started += TouchPressed;
-        _touchLongAction.performed += TouchLongPressed;
-        EnhancedTouch.Touch.onFingerMove += FingerMove;
-        EnhancedTouch.Touch.onFingerUp += FingerUp;
+        Touch.onFingerMove += FingerMove;
+        Touch.onFingerDown += FingerDown;
+        Touch.onFingerUp += FingerUp;
     }
 
     void OnDisable()
     {
-        _touchPressAction.started -= TouchPressed;
-        _touchLongAction.performed -= TouchLongPressed;
-        EnhancedTouch.Touch.onFingerMove -= FingerMove;
-        EnhancedTouch.Touch.onFingerUp -= FingerUp;
+        Touch.onFingerMove -= FingerMove;
+        Touch.onFingerDown -= FingerDown;
+        Touch.onFingerUp -= FingerUp;
 
-        EnhancedTouch.TouchSimulation.Disable();
-        EnhancedTouch.EnhancedTouchSupport.Disable();
+        TouchSimulation.Disable();
+        EnhancedTouchSupport.Disable();
     }
 
-    void TouchPressed(InputAction.CallbackContext context)
+    void FingerMove(Finger finger)
     {
-        Vector2 touchPos = _touchPosition.ReadValue<Vector2>();
-        Vector3 worldPos = Camera.main.ScreenToWorldPoint(touchPos);
-        OnTouchPress?.Invoke(touchPos);
-        // Ray pickup = Camera.main.ScreenPointToRay(touchPos);
-
-        // UpdateDebug(worldPos, Color.white);
-    }
-
-    void TouchLongPressed(InputAction.CallbackContext context)
-    {
-        Vector2 touchPos = _touchPosition.ReadValue<Vector2>();
-        Vector3 worldPos = Camera.main.ScreenToWorldPoint(touchPos);
-        OnTouchLongPress?.Invoke(touchPos);
+        OnFingerMove?.Invoke(finger.screenPosition);
         
-        // UpdateDebug(worldPos, Color.red);
+        UpdateDebug(finger, Color.green);
     }
 
-    void FingerMove(EnhancedTouch.Finger finger)
+    void FingerDown(Finger finger)
     {
-        _touchLongAction.Disable();
-            
-        Vector2 touchPos = _touchPosition.ReadValue<Vector2>();
-        Vector3 worldPos = Camera.main.ScreenToWorldPoint(touchPos);
-        OnFingerMove?.Invoke(touchPos);
-        
-        // UpdateDebug(worldPos, Color.green);
+        OnFingerDown?.Invoke(finger.screenPosition);
+
+        UpdateDebug(finger, Color.white);
     }
 
-    void FingerUp(EnhancedTouch.Finger finger)
+    void FingerUp(Finger finger)
     {
-        _touchLongAction.Enable();
-
         OnFingerUp?.Invoke();
+
+        UpdateDebug(finger, Color.white);
     }
 
-    void UpdateDebug(Vector3 worldPos, Color color)
+    void UpdateDebug(Finger finger, Color color)
     {
+        Vector3 worldPos = Camera.main.ScreenToWorldPoint(new Vector3(finger.screenPosition.x, finger.screenPosition.y, 18.5f));
         worldPos.z = _debugInput.transform.position.z;
 
         SpriteRenderer sprite = _debugInput.GetComponent<SpriteRenderer>();

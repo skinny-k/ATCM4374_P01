@@ -6,7 +6,7 @@ public class DiceRollState : State
 {
     GameSM _stateMachine;
     GameController _controller;
-    int _capitalRolled = 0;
+    float _capitalRolled = 0;
     int _departmentRolled = 0;
     bool _capitalLanded = false;
     bool _departmentLanded = false;
@@ -40,9 +40,11 @@ public class DiceRollState : State
 
         if (_capitalLanded && _departmentLanded)
         {
-            GiveCapitalToDepartment(_capitalRolled, _departmentRolled);
+            _controller.Resource_Manager.GiveCapitalToDepartment(_capitalRolled, _departmentRolled);
             _stateMachine.ChangeState<PlayState>();
         }
+
+        _controller.Resource_Manager.DecrementResources();
     }
     
     public override void FixedTick()
@@ -65,17 +67,12 @@ public class DiceRollState : State
     void CapitalDieFall(int result)
     {
         _capitalLanded = true;
-        _capitalRolled = result;
+        _capitalRolled = (float)result;
     }
 
     void DepartmentDieFall(int result)
     {
         _departmentLanded = true;
         _departmentRolled = result;
-    }
-
-    void GiveCapitalToDepartment(int capital, int department)
-    {
-        //
     }
 }

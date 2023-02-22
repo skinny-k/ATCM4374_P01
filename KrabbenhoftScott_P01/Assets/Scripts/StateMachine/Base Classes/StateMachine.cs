@@ -5,7 +5,7 @@ using UnityEngine;
 public class StateMachine : MonoBehaviour
 {
     public State CurrentState { get; protected set; }
-    protected State _previousState;
+    public State PreviousState { get; protected set; }
     protected List<State> _states = new List<State>();
 
     protected bool _inTransition = false;
@@ -74,21 +74,21 @@ public class StateMachine : MonoBehaviour
 
     protected void StoreCurrentStateAsPrevious(State newState)
     {
-        if (_previousState == null && newState != null)
+        if (PreviousState == null && newState != null)
         {
-            _previousState = newState;
+            PreviousState = newState;
         }
-        else if (_previousState != null && CurrentState != null)
+        else if (PreviousState != null && CurrentState != null)
         {
-            _previousState = CurrentState;
+            PreviousState = CurrentState;
         }
     }
 
     public void ChangeStateToPrevious()
     {
-        if (_previousState != null)
+        if (PreviousState != null)
         {
-            ChangeState(_previousState);
+            ChangeState(PreviousState);
         }
     }
 }

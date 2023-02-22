@@ -27,6 +27,8 @@ public class PlayState : State
     public override void Tick()
     {
         base.Tick();
+
+        _controller.Resource_Manager.DecrementResources();
     }
     
     public override void FixedTick()
@@ -36,17 +38,22 @@ public class PlayState : State
 
     protected override void SubscribeToInput()
     {
-        TouchManager.OnTouchPress += TouchPressed;
+        TouchManager.OnFingerDown += TouchPressed;
     }
 
     protected override void UnsubscribeToInput()
     {
-        TouchManager.OnTouchPress -= TouchPressed;
+        TouchManager.OnFingerDown -= TouchPressed;
     }
 
     void TouchPressed(Vector2 touchPos)
     {
-        _controller.RollDice();
-        _stateMachine.ChangeState<DiceRollState>();
+        Ray ray = Camera.main.ScreenPointToRay(new Vector3(touchPos.x, touchPos.y, 0));
+        RaycastHit info;
+
+        if (Physics.Raycast(ray, out info) && info.collider.gameObject.layer == LayerMask.NameToLayer("Dice"))
+        {
+            _controller.RollDice();
+        }
     }
 }

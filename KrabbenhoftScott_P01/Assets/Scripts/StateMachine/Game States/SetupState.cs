@@ -17,6 +17,13 @@ public class SetupState : State
     {
         base.Enter();
 
+        if (_stateMachine.PreviousState != this)
+        {
+            _controller.StartGame();
+        }
+
+        _controller.Dice_Tray.SetBounds(Screen.width, Screen.height);
+        _controller.Resource_Manager.SetInitial();
         Debug.Log("Entered SetupState");
     }
 

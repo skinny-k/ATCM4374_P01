@@ -21,6 +21,7 @@ public class GameDie : MonoBehaviour
     protected virtual void Start()
     {
         _rb = GetComponent<Rigidbody>();
+        _rb.transform.up = _faces[Random.Range(0, _faces.Count)].transform.forward;
     }
     
     protected virtual void FixedUpdate()
