@@ -20,13 +20,12 @@ public class DiceRollState : State
     public override void Enter()
     {
         base.Enter();
+        Debug.Log("Entered DiceRollState");
 
         _capitalRolled = 0;
         _departmentRolled = 0;
         _capitalLanded = false;
         _departmentLanded = false;
-
-        Debug.Log("Entered DiceRollState");
     }
 
     public override void Exit()
@@ -40,11 +39,13 @@ public class DiceRollState : State
 
         if (_capitalLanded && _departmentLanded)
         {
-            _controller.Resource_Manager.GiveCapitalToDepartment(_capitalRolled, _departmentRolled);
-            _stateMachine.ChangeState<PlayState>();
+            if (_controller.Resource_Manager.GiveCapitalToDepartment(_capitalRolled, _departmentRolled))
+            {
+                _stateMachine.ChangeState<PlayState>();
+            }
         }
 
-        _controller.Resource_Manager.DecrementResources();
+        _controller.Resource_Manager.DrainCapital();
     }
     
     public override void FixedTick()

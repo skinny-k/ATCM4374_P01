@@ -17,18 +17,24 @@ public class PlayState : State
     {
         base.Enter();
         Debug.Log("Entered PlayState");
+
+        _controller.Resource_Manager.EnableIncrement();
+        _controller.Resource_Manager.EnableDecrement();
     }
 
     public override void Exit()
     {
         base.Exit();
+
+        _controller.Resource_Manager.DisableIncrement();
+        _controller.Resource_Manager.DisableDecrement();
     }
 
     public override void Tick()
     {
         base.Tick();
 
-        _controller.Resource_Manager.DecrementResources();
+        _controller.Resource_Manager.DrainCapital();
     }
     
     public override void FixedTick()

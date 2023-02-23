@@ -16,8 +16,9 @@ public class WinState : State
     public override void Enter()
     {
         base.Enter();
-
         Debug.Log("Entered WinState");
+
+        _controller.DisplayWinPanel(true);
     }
 
     public override void Exit()

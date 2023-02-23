@@ -16,8 +16,9 @@ public class LoseState : State
     public override void Enter()
     {
         base.Enter();
-
         Debug.Log("Entered LoseState");
+
+        _controller.DisplayLosePanel(true);
     }
 
     public override void Exit()

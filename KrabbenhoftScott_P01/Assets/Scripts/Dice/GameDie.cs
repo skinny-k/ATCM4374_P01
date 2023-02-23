@@ -7,12 +7,13 @@ using Random = UnityEngine.Random;
 [RequireComponent(typeof(Rigidbody))]
 public class GameDie : MonoBehaviour
 {
-    [SerializeField] protected List<DieFace> _faces = new List<DieFace>();
     [SerializeField] protected float _minCastForce = 2f;
     [SerializeField] protected float _maxCastForce = 20f;
     [SerializeField] protected float _minCastTorque = 0.25f;
     [SerializeField] protected float _maxCastTorque = 3f;
+    [SerializeField] protected float _bounceForce = 5f;
 
+    protected List<DieFace> _faces = new List<DieFace>();
     protected Rigidbody _rb;
     protected bool _rolling = false;
 
@@ -20,6 +21,15 @@ public class GameDie : MonoBehaviour
 
     protected virtual void Start()
     {
+        foreach (Transform child in transform)
+        {
+            DieFace face = child.GetComponent<DieFace>();
+            if (face != null)
+            {
+                _faces.Add(face);
+            }
+        }
+        
         _rb = GetComponent<Rigidbody>();
         _rb.transform.up = _faces[Random.Range(0, _faces.Count)].transform.forward;
     }
@@ -30,6 +40,14 @@ public class GameDie : MonoBehaviour
         {
             _rolling = false;
             OnLand?.Invoke(GetResultOfRoll());
+        }
+    }
+
+    protected virtual void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.gameObject.GetComponent<GameDie>() != null)
+        {
+            _rb.AddForce(collision.impulse * _bounceForce);
         }
     }
     
@@ -51,16 +69,23 @@ public class GameDie : MonoBehaviour
 
     public virtual int GetResultOfRoll()
     {
-        DieFace resultFace = _faces[0];
+        DieFace resultFace = null;
         foreach (DieFace face in _faces)
         {
-            if (face.transform.position.z == transform.position.z - 0.51f)
+            if (face.transform.forward == Vector3.forward)
             {
                 resultFace = face;
                 break;
             }
         }
 
-        return resultFace.Number;
+        if (resultFace != null)
+        {
+            return resultFace.Number;
+        }
+        else
+        {
+            return 0;
+        }
     }
 }

@@ -7,12 +7,12 @@ public class DiceTray : MonoBehaviour
     [SerializeField] BoxCollider _floor;
     [SerializeField] BoxCollider[] _walls = new BoxCollider[4];
     [SerializeField] float _wallOffset = 7.5f;
-    [SerializeField] CapitalDie _capitalDie;
-    [SerializeField] DepartmentDie _departmentDie;
+    [SerializeField] GameDie _capitalDie;
+    [SerializeField] GameDie _departmentDie;
     [SerializeField] float _dieOffset = 0.25f;
 
-    public CapitalDie Capital_Die { get => _capitalDie; }
-    public DepartmentDie Department_Die { get => _departmentDie; }
+    public GameDie Capital_Die { get => _capitalDie; }
+    public GameDie Department_Die { get => _departmentDie; }
 
     public void SetBounds(int screenWidth, int screenHeight)
     {

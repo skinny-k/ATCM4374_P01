@@ -16,6 +16,7 @@ public class SetupState : State
     public override void Enter()
     {
         base.Enter();
+        Debug.Log("Entered SetupState");
 
         if (_stateMachine.PreviousState != this)
         {
@@ -24,7 +25,8 @@ public class SetupState : State
 
         _controller.Dice_Tray.SetBounds(Screen.width, Screen.height);
         _controller.Resource_Manager.SetInitial();
-        Debug.Log("Entered SetupState");
+        _controller.DisplayWinPanel(false);
+        _controller.DisplayLosePanel(false);
     }
 
     public override void Exit()
