@@ -785,7 +785,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91ae3a42fe86e400099d2dff1859345d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _drainSpeed: 2
+  _drainSpeed: 1
 --- !u!1 &151552024
 GameObject:
   m_ObjectHideFlags: 0
@@ -891,7 +891,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91ae3a42fe86e400099d2dff1859345d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _drainSpeed: 2
+  _drainSpeed: 1
 --- !u!1 &206841467
 GameObject:
   m_ObjectHideFlags: 0
@@ -1930,7 +1930,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91ae3a42fe86e400099d2dff1859345d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _drainSpeed: 2
+  _drainSpeed: 1
 --- !u!1 &472193621
 GameObject:
   m_ObjectHideFlags: 0
@@ -5713,7 +5713,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91ae3a42fe86e400099d2dff1859345d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _drainSpeed: 2
+  _drainSpeed: 1
 --- !u!1 &856070934
 GameObject:
   m_ObjectHideFlags: 0
@@ -6231,7 +6231,7 @@ MonoBehaviour:
   - {fileID: 151552027}
   _maxResources: 20
   _initialResources: 10
-  _capitalToCashOut: 61
+  _capitalToCashOut: 65
   _incrementButtons:
   - {fileID: 821784489}
   - {fileID: 303110873}
@@ -10232,7 +10232,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91ae3a42fe86e400099d2dff1859345d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _drainSpeed: 2
+  _drainSpeed: 1
 --- !u!1 &1920821212
 GameObject:
   m_ObjectHideFlags: 0
@@ -10807,7 +10807,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91ae3a42fe86e400099d2dff1859345d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _drainSpeed: 2
+  _drainSpeed: 1
 --- !u!1 &2009468458
 GameObject:
   m_ObjectHideFlags: 0
