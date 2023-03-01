@@ -39,10 +39,8 @@ public class DiceRollState : State
 
         if (_capitalLanded && _departmentLanded)
         {
-            if (_controller.Resource_Manager.GiveCapitalToDepartment(_capitalRolled, _departmentRolled))
-            {
-                _stateMachine.ChangeState<PlayState>();
-            }
+            _controller.Resource_Manager.GiveCapitalToDepartment(_capitalRolled, _departmentRolled);
+            _stateMachine.ChangeState<PlayState>();
         }
 
         _controller.Resource_Manager.DrainCapital();

@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class ResourceManager : MonoBehaviour
 {
     [SerializeField] GameController _controller;
     [SerializeField] List<Department> _departments = new List<Department>();
+    [SerializeField] TMP_Text _displayText;
     [SerializeField] float _maxResources = 99f;
     [SerializeField] float _initialResources = 10f;
     [SerializeField] float _capitalToCashOut = 100f;
@@ -14,12 +16,13 @@ public class ResourceManager : MonoBehaviour
     [Header("Buttons")]
     [SerializeField] List<Button> _incrementButtons = new List<Button>();
     [SerializeField] List<Button> _decrementButtons = new List<Button>();
+    [SerializeField] Button _cashOutButton;
 
     List<float> _resources = new List<float>();
     float _totalCapital = 0;
     float _liquidCapital = 0;
 
-    public bool GiveCapitalToDepartment(float capital, int department)
+    public void GiveCapitalToDepartment(float capital, int department)
     {
         if (department > 0)
         {
@@ -33,13 +36,12 @@ public class ResourceManager : MonoBehaviour
             }
         }
 
+        _displayText.text = "Total Capital: " + NumberFormatter.FormatNumber(_totalCapital) + " / " + _capitalToCashOut;
+
         if (_totalCapital >= _capitalToCashOut)
         {
-            _controller.GetComponent<GameSM>().ChangeState<WinState>();
-            return false;
+            _cashOutButton.interactable = true;
         }
-
-        return true;
     }
 
     public void DrainCapital()
@@ -95,10 +97,10 @@ public class ResourceManager : MonoBehaviour
             dept.Capital_Slider.maxValue = _maxResources;
         }
 
+        _displayText.text = "Total Capital: " + NumberFormatter.FormatNumber(_totalCapital) + " / " + _capitalToCashOut;
         _liquidCapital = 0;
+        _cashOutButton.interactable = false;
         DisableIncrement();
-
-        // Debug.Log(_totalCapital);
     }
 
     public void DisableIncrement()
@@ -135,19 +137,4 @@ public class ResourceManager : MonoBehaviour
             button.interactable = true;
         }
     }
-
-    /*
-    public void UpdateSliders(float amount)
-    {
-        Debug.Log(_maxSliderValue + ", " + (amount + _sliderUpperBuffer));
-        if (_maxSliderValue <= Mathf.Min(amount + _sliderUpperBuffer, _maxResources))
-        {
-            _maxSliderValue = Mathf.Min(amount + _sliderUpperBuffer, _maxResources);
-            foreach (Department dept in _departments)
-            {
-                dept.Capital_Slider.maxValue = _maxSliderValue;
-            }
-        }
-    }
-    */
 }

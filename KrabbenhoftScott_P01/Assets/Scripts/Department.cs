@@ -23,7 +23,6 @@ public class Department : MonoBehaviour
 
     void UpdateSlider()
     {
-        // _manager.UpdateSliders(Capital);
         _slider.value = Capital;
     }
     
