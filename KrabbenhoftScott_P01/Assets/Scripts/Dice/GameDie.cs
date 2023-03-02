@@ -55,7 +55,9 @@ public class GameDie : MonoBehaviour
     {
         if (!_rolling)
         {
-            Vector3 forceToApply = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), -1f);
+            _rb.useGravity = true;
+            
+            Vector3 forceToApply = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), 0);
             forceToApply = forceToApply.normalized * Random.Range(_minCastForce, _maxCastForce);
             Vector3 torqueToApply = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f));
             torqueToApply = torqueToApply.normalized * Random.Range(_minCastTorque, _maxCastTorque);
