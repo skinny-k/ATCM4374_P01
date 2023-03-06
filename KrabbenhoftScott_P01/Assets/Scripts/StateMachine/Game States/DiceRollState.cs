@@ -22,10 +22,17 @@ public class DiceRollState : State
         base.Enter();
         Debug.Log("Entered DiceRollState");
 
-        _capitalRolled = 0;
-        _departmentRolled = 0;
-        _capitalLanded = false;
-        _departmentLanded = false;
+        if (_stateMachine.PreviousState != _stateMachine.Pause)
+        {
+            _capitalRolled = 0;
+            _departmentRolled = 0;
+            _capitalLanded = false;
+            _departmentLanded = false;
+        }
+        else
+        {
+            Debug.Log(_capitalRolled + ", " + _departmentRolled + ", " + _capitalLanded + ", " + _departmentLanded);
+        }
     }
 
     public override void Exit()
@@ -39,10 +46,8 @@ public class DiceRollState : State
 
         if (_capitalLanded && _departmentLanded)
         {
-            if (_controller.Resource_Manager.GiveCapitalToDepartment(_capitalRolled, _departmentRolled))
-            {
-                _stateMachine.ChangeState<PlayState>();
-            }
+            _controller.Resource_Manager.GiveCapitalToDepartment(_capitalRolled, _departmentRolled);
+            _stateMachine.ChangeState<PlayState>();
         }
 
         _controller.Resource_Manager.DrainCapital();

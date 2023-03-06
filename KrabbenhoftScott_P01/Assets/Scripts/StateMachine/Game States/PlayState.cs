@@ -59,7 +59,7 @@ public class PlayState : State
 
         if (Physics.Raycast(ray, out info) && info.collider.gameObject.layer == LayerMask.NameToLayer("Dice"))
         {
-            _controller.RollDice();
+            _controller.GetComponent<StateMachine>().ChangeState<DiceHoldState>();
         }
     }
 }
