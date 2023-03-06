@@ -7,6 +7,7 @@ public class GameSM : StateMachine
 {
     public SetupState Setup { get; private set; }
     public PlayState Play { get; private set; }
+    public PauseState Pause { get; private set; }
     public DiceHoldState DiceHold { get; private set; }
     public DiceRollState DiceRoll { get; private set; }
     public WinState Win { get; private set; }
@@ -20,6 +21,7 @@ public class GameSM : StateMachine
 
         Setup = new SetupState(this, _controller);
         Play = new PlayState(this, _controller);
+        Pause = new PauseState(this, _controller);
         DiceHold = new DiceHoldState(this, _controller);
         DiceRoll = new DiceRollState(this, _controller);
         Win = new WinState(this, _controller);
@@ -27,6 +29,7 @@ public class GameSM : StateMachine
 
         _states.Add(Setup);
         _states.Add(Play);
+        _states.Add(Pause);
         _states.Add(DiceHold);
         _states.Add(DiceRoll);
         _states.Add(Win);

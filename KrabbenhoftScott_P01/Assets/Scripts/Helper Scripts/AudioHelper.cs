@@ -4,10 +4,14 @@ using UnityEngine;
 
 public static class AudioHelper
 {
-    public static AudioSource PlayClip2D(AudioClip clip, float volume)
+    public static AudioSource PlayClip2D(AudioClip clip, float volume, bool randomizePitch = false)
     {
         GameObject _audioObject = new GameObject("Audio2D");
         AudioSource _audioSource = _audioObject.AddComponent<AudioSource>();
+        if (randomizePitch)
+        {
+            _audioSource.pitch += Random.Range(-2f, 2f);
+        }
 
         _audioSource.clip = clip;
         _audioSource.volume = volume;
@@ -18,7 +22,7 @@ public static class AudioHelper
         return _audioSource;
     }
 
-    public static AudioSource PlayClip3D(AudioClip clip, float volume, Vector3 location)
+    public static AudioSource PlayClip3D(AudioClip clip, float volume, Vector3 location, bool randomizePitch = false)
     {
         GameObject _audioObject = new GameObject("Audio3D");
         AudioSource _audioSource = _audioObject.AddComponent<AudioSource>();

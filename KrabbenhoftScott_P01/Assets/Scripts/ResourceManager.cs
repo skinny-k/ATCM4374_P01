@@ -13,32 +13,49 @@ public class ResourceManager : MonoBehaviour
     [SerializeField] float _initialResources = 10f;
     [SerializeField] float _capitalToCashOut = 100f;
 
+    [Header("Feedback Settings")]
+    [SerializeField] AudioClip _successSFX;
+    [SerializeField] AudioClip _failSFX;
+    [Range(0.0f, 1.0f)]
+    [SerializeField] float _volume = 1f;
+
     [Header("Buttons")]
     [SerializeField] List<Button> _incrementButtons = new List<Button>();
     [SerializeField] List<Button> _decrementButtons = new List<Button>();
     [SerializeField] Button _cashOutButton;
 
+    public Department BankruptDepartment { get; private set; } = null;
+    public float TotalCapital { get; private set; } = 0;
+    
     List<float> _resources = new List<float>();
-    float _totalCapital = 0;
     float _liquidCapital = 0;
 
     public void GiveCapitalToDepartment(float capital, int department)
     {
         if (department > 0)
         {
-            _totalCapital += _departments[department - 1].GiveCapital(capital);
+            TotalCapital += _departments[department - 1].GiveCapital(capital);
         }
         else if (department == 0 && capital > 0)
         {
             foreach (Department dept in _departments)
             {
-                _totalCapital += dept.GiveCapital(capital);
+                TotalCapital += dept.GiveCapital(capital);
             }
         }
 
-        _displayText.text = "Total Capital: " + NumberFormatter.FormatNumber(_totalCapital) + " / " + _capitalToCashOut;
+        if (capital > 0)
+        {
+            AudioHelper.PlayClip2D(_successSFX, _volume * (capital / 6));
+        }
+        else
+        {
+            AudioHelper.PlayClip2D(_failSFX, _volume);
+        }
 
-        if (_totalCapital >= _capitalToCashOut)
+        _displayText.text = "Total Capital: " + NumberFormatter.FormatNumber(TotalCapital) + " / " + _capitalToCashOut;
+
+        if (TotalCapital >= _capitalToCashOut)
         {
             _cashOutButton.interactable = true;
         }
@@ -51,6 +68,7 @@ public class ResourceManager : MonoBehaviour
         {
             if (dept.DrainCapital() == 0)
             {
+                BankruptDepartment = dept;
                 bankrupt = true;
             }
         }
@@ -93,11 +111,11 @@ public class ResourceManager : MonoBehaviour
     {
         foreach (Department dept in _departments)
         {
-            _totalCapital += dept.SetCapital(_initialResources, _maxResources, this);
+            TotalCapital += dept.SetCapital(_initialResources, _maxResources, this);
             dept.Capital_Slider.maxValue = _maxResources;
         }
 
-        _displayText.text = "Total Capital: " + NumberFormatter.FormatNumber(_totalCapital) + " / " + _capitalToCashOut;
+        _displayText.text = "Total Capital: " + NumberFormatter.FormatNumber(TotalCapital) + " / " + _capitalToCashOut;
         _liquidCapital = 0;
         _cashOutButton.interactable = false;
         DisableIncrement();
